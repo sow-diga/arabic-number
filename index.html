@@ -60,10 +60,12 @@
                 feedbackEl.style.backgroundColor = '#d4edda';
                 feedbackEl.style.color = '#155724';
                 feedbackEl.innerHTML = '✓ Correct!';
+                nextNumber()
             } else {
                 feedbackEl.style.backgroundColor = '#f8d7da';
                 feedbackEl.style.color = '#721c24';
-                feedbackEl.innerHTML = `✗ Incorrect. The answer was ${currentNum}`;
+                //feedbackEl.innerHTML = `✗ Incorrect. The answer was ${currentNum}`;
+                feedbackEl.innerHTML = `✗ Incorrect. Try again`;
             }
         }
     </script>
