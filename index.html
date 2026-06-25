@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Arabic Number Listening Tester</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 500px; margin: 40px auto; padding: 20px; background: #f9f9f9; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        button { background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 16px; margin-right: 5px;}
+        button:hover { background: #0056b3; }
+        input { padding: 8px; width: 80px; border: 1px solid #ccc; border-radius: 6px; margin-right: 10px; }
+        .answer-box { width: 100%; box-sizing: border-box; padding: 12px; margin: 15px 0; font-size: 18px; }
+        .feedback { margin-top: 15px; font-weight: bold; padding: 10px; border-radius: 6px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Arabic Number Tester</h2>
+        <label>Range: </label>
+        <input type="number" id="min" value="1"> to <input type="number" id="max" value="100">
+        <br><br>
+        <button onclick="nextNumber()">New Number 🔊</button>
+        <button onclick="repeat()" style="background:#6c757d">Repeat 🔄</button>
+        
+        <input type="number" id="guess" class="answer-box" placeholder="What digits did you hear?">
+        <button onclick="checkAnswer()" style="width:100%; background:#28a745">Check Answer</button>
+        <div id="feedback" class="feedback"></div>
+    </div>
+
+    <script>
+        let currentNum = null;
+
+        function speakArabic(text) {
+            window.speechSynthesis.cancel(); // Stop any current speech
+            let utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ar-SA'; // Target Saudi Arabic
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function nextNumber() {
+            let min = parseInt(document.getElementById('min').value) || 1;
+            let max = parseInt(document.getElementById('max').value) || 100;
+            currentNum = Math.floor(Math.random() * (max - min + 1)) + min;
+            
+            document.getElementById('guess').value = '';
+            document.getElementById('feedback').style.display = 'none';
+            speakArabic(currentNum.toString());
+        }
+
+        function repeat() {
+            if (currentNum !== null) speakArabic(currentNum.toString());
+        }
+
+        function checkAnswer() {
+            let userGuess = parseInt(document.getElementById('guess').value);
+            let feedbackEl = document.getElementById('feedback');
+            feedbackEl.style.display = 'block';
+            
+            if (userGuess === currentNum) {
+                feedbackEl.style.backgroundColor = '#d4edda';
+                feedbackEl.style.color = '#155724';
+                feedbackEl.innerHTML = '✓ Correct!';
+            } else {
+                feedbackEl.style.backgroundColor = '#f8d7da';
+                feedbackEl.style.color = '#721c24';
+                feedbackEl.innerHTML = `✗ Incorrect. The answer was ${currentNum}`;
+            }
+        }
+    </script>
+</body>
+</html>
