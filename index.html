@@ -39,7 +39,7 @@
 
         function nextNumber() {
             let min = parseInt(document.getElementById('min').value) || 1;
-            let max = parseInt(document.getElementById('max').value) || 100;
+            let max = parseInt(document.getElementById('max').value) || 1000;
             currentNum = Math.floor(Math.random() * (max - min + 1)) + min;
             
             document.getElementById('guess').value = '';
