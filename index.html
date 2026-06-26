@@ -2,72 +2,244 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Arabic Number Listening Tester</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic Number Listening</title>
+
     <style>
-        body { font-family: system-ui, sans-serif; max-width: 500px; margin: 40px auto; padding: 20px; background: #f9f9f9; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        button { background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 16px; margin-right: 5px;}
-        button:hover { background: #0056b3; }
-        input { padding: 8px; width: 80px; border: 1px solid #ccc; border-radius: 6px; margin-right: 10px; }
-        .answer-box { width: 100%; box-sizing: border-box; padding: 12px; margin: 15px 0; font-size: 18px; }
-        .feedback { margin-top: 15px; font-weight: bold; padding: 10px; border-radius: 6px; display: none; }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <h2>Arabic Number Tester</h2>
-        <label>Range: </label>
-        <input type="number" id="min" value="1"> to <input type="number" id="max" value="1000">
-        <br><br>
-        <button onclick="nextNumber()">New Number 🔊</button>
-        <button onclick="repeat()" style="background:#6c757d">Repeat 🔄</button>
-        
-        <input type="number" id="guess" class="answer-box" placeholder="What digits did you hear?">
-        <button onclick="checkAnswer()" style="width:100%; background:#28a745">Check Answer</button>
-        <div id="feedback" class="feedback"></div>
-    </div>
-
-    <script>
-        let currentNum = null;
-
-        function speakArabic(text) {
-            window.speechSynthesis.cancel(); // Stop any current speech
-            let utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ar-SA'; // Target Saudi Arabic
-            window.speechSynthesis.speak(utterance);
+        * {
+            box-sizing: border-box;
         }
 
-        function nextNumber() {
-            let min = parseInt(document.getElementById('min').value) || 1;
-            let max = parseInt(document.getElementById('max').value) || 1000;
-            currentNum = Math.floor(Math.random() * (max - min + 1)) + min;
-            
-            document.getElementById('guess').value = '';
-            document.getElementById('feedback').style.display = 'none';
-            speakArabic(currentNum.toString());
+        body {
+            font-family: system-ui, sans-serif;
+            background: #D4D4D8;
+            margin: 0;
+            padding: 20px;
         }
 
-        function repeat() {
-            if (currentNum !== null) speakArabic(currentNum.toString());
+        .card {
+            background: white;
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
-        function checkAnswer() {
-            let userGuess = parseInt(document.getElementById('guess').value);
-            let feedbackEl = document.getElementById('feedback');
-            feedbackEl.style.display = 'block';
-            
-            if (userGuess === currentNum) {
-                feedbackEl.style.backgroundColor = '#d4edda';
-                feedbackEl.style.color = '#155724';
-                feedbackEl.innerHTML = '✓ Correct!';
-                nextNumber()
-            } else {
-                feedbackEl.style.backgroundColor = '#f8d7da';
-                feedbackEl.style.color = '#721c24';
-                //feedbackEl.innerHTML = `✗ Incorrect. The answer was ${currentNum}`;
-                feedbackEl.innerHTML = `✗ Incorrect. Try again`;
+        h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .range {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        /* Only style the min/max inputs */
+        .range input {
+            padding: 10px;
+            width: 80px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .answer-box {
+            width: 100%;
+            padding: 14px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+        }
+
+        .new-btn {
+            background: #007bff;
+        }
+
+        .repeat-btn {
+            background: #6c757d;
+        }
+
+        .check-btn {
+            width: 100%;
+            background: #28a745;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 12px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            .range input {
+                width: 70px;
+                font-size: 20px;
+            }
+
+            .answer-box {
+                font-size: 28px;
+            }
+
+            button {
+                font-size: 20px;
+                padding: 16px;
             }
         }
-    </script>
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h2>Arabic Number Tester</h2>
+
+    <div class="range">
+        <label>From</label>
+        <input type="number" id="min" value="1">
+
+        <label>To</label>
+        <input type="number" id="max" value="1000">
+    </div>
+
+    <div class="button-row">
+        <button class="new-btn" onclick="nextNumber()">🔊 New Number</button>
+        <button class="repeat-btn" onclick="repeat()">🔄 Repeat</button>
+    </div>
+
+<input
+    type="text"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    id="guess"
+    class="answer-box"
+    placeholder="What digits did you hear?"
+    autocomplete="off">
+
+    <button
+        class="check-btn"
+        onclick="checkAnswer()">
+        ✓ Check Answer
+    </button>
+
+    <div id="feedback" class="feedback"></div>
+
+</div>
+
+<script>
+
+let currentNum = null;
+
+function speakArabic(text) {
+
+    if (!window.speechSynthesis) {
+        alert("Speech synthesis is not supported on this device.");
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    let utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ar-SA';
+
+    window.speechSynthesis.speak(utterance);
+}
+
+function nextNumber() {
+
+    let min = parseInt(document.getElementById('min').value) || 1;
+    let max = parseInt(document.getElementById('max').value) || 1000;
+
+    currentNum = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    document.getElementById('guess').value = '';
+    document.getElementById('feedback').style.display = 'none';
+
+    speakArabic(currentNum.toString());
+}
+
+function repeat() {
+
+    if (currentNum !== null) {
+        speakArabic(currentNum.toString());
+    }
+}
+
+function checkAnswer() {
+
+    let userGuess = parseInt(
+    document.getElementById('guess').value.trim(),
+    10
+);
+
+    let feedbackEl = document.getElementById('feedback');
+
+    feedbackEl.style.display = 'block';
+
+    if (userGuess === currentNum) {
+
+        feedbackEl.style.backgroundColor = '#d4edda';
+        feedbackEl.style.color = '#155724';
+        feedbackEl.innerHTML = "✓ Correct!";
+       nextNumber();
+    } else {
+
+        feedbackEl.style.backgroundColor = '#f8d7da';
+        feedbackEl.style.color = '#721c24';
+        feedbackEl.innerHTML = "✗ Incorrect. Try again!";
+
+    }
+}
+
+</script>
+
 </body>
 </html>
