@@ -151,7 +151,7 @@
     </div>
 
     <div class="button-row">
-        <button class="new-btn" onclick="nextNumber()">🔊 New Number</button>
+        <button class="new-btn" onclick="nextNumber()">🔊 New</button>
         <button class="repeat-btn" onclick="repeat()">🔄 Repeat</button>
     </div>
 
@@ -219,6 +219,12 @@ function checkAnswer() {
     document.getElementById('guess').value.trim(),
     10
 );
+
+document.getElementById("guess").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        checkAnswer();
+    }
+});
 
     let feedbackEl = document.getElementById('feedback');
 
